@@ -1,0 +1,701 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="定位," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="由于 JavaScript “弱语言”的性质，使得其在使用过程中异常的宽松灵活，但也极为容易“掉进陷阱”。这些陷进往往隐藏的很深，所以要多加小心。
+全局变量JavaScript 通过函数管理作用域。在函数内部声明的变量只在这个函数内部，函数外面不可用。另一方面，全局变量就是在任何函数外面声明的或是未声明直接简单使用的。“未声明直接简单使用”，指的是不用 var 关键字来声明变量。这个我们已经非常清">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript中的陷阱">
+<meta property="og:url" content="http://www.radom.cc/2016/07/09/JavaScript 中的陷阱/index.html">
+<meta property="og:site_name" content="第三空间">
+<meta property="og:description" content="由于 JavaScript “弱语言”的性质，使得其在使用过程中异常的宽松灵活，但也极为容易“掉进陷阱”。这些陷进往往隐藏的很深，所以要多加小心。
+全局变量JavaScript 通过函数管理作用域。在函数内部声明的变量只在这个函数内部，函数外面不可用。另一方面，全局变量就是在任何函数外面声明的或是未声明直接简单使用的。“未声明直接简单使用”，指的是不用 var 关键字来声明变量。这个我们已经非常清">
+<meta property="og:updated_time" content="2016-07-08T16:00:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript中的陷阱">
+<meta name="twitter:description" content="由于 JavaScript “弱语言”的性质，使得其在使用过程中异常的宽松灵活，但也极为容易“掉进陷阱”。这些陷进往往隐藏的很深，所以要多加小心。
+全局变量JavaScript 通过函数管理作用域。在函数内部声明的变量只在这个函数内部，函数外面不可用。另一方面，全局变量就是在任何函数外面声明的或是未声明直接简单使用的。“未声明直接简单使用”，指的是不用 var 关键字来声明变量。这个我们已经非常清">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://www.radom.cc/2016/07/09/JavaScript 中的陷阱/"/>
+
+  <title> JavaScript中的陷阱 | 第三空间 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">第三空间</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">做一个有产品思维的F2E</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript中的陷阱
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-09T00:00:00+08:00" content="2016-07-09">
+              2016-07-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/09/JavaScript 中的陷阱/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/07/09/JavaScript 中的陷阱/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>由于 JavaScript “弱语言”的性质，使得其在使用过程中异常的宽松灵活，但也极为容易“掉进陷阱”。这些陷进往往隐藏的很深，所以要多加小心。</p>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><p>JavaScript 通过函数管理作用域。在函数内部声明的变量只在这个函数内部，函数外面不可用。另一方面，全局变量就是在任何函数外面声明的或是未声明直接简单使用的。<br>“未声明直接简单使用”，指的是不用 var 关键字来声明变量。这个我们已经非常清楚，避免造成隐式产生全局变量的方法就是声明变量尽量用 var 关键字。<br>可你以为用了 var 就 ok 了？来看看这个陷进：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = b = <span class="number">0</span>;</div><div class="line">    <span class="comment">// body...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>也许你期望得到的是两个局部变量，但 b 却是货真价实的全局变量。why? Because <strong>赋值运算是自右往左的</strong> ，所以这相当于：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = (b = <span class="number">0</span>);</div><div class="line">    <span class="comment">// body...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以 b 是全局变量。</p>
+<p>解决：变量声明，最好一个个来，别搞批发~_~;</p>
+<h3 id="变量声明"><a href="#变量声明" class="headerlink" title="变量声明"></a>变量声明</h3><p>先来看陷阱：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">myName = <span class="string">"global"</span>;</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(myName);</div><div class="line">    <span class="keyword">var</span> myName = <span class="string">"local"</span>;</div><div class="line">    alert(myName);</div><div class="line">&#125;</div><div class="line"> </div><div class="line">foo();</div></pre></td></tr></table></figure></p>
+<p>乍看上去，我们预计期望两次 alert 的结果分别为 “global” 与 “local”，但真实的结果是 “undefined” 与 “local”。why? Because <strong>变量在同一作用域（同一函数）中，声明都是被提至作用域顶部先进行解析的</strong>。</p>
+<p>所以以上代码片段的执行行为可能就像这样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> myName;</div><div class="line">    alert(myName); <span class="comment">// "undefined"</span></div><div class="line">    myName = <span class="string">"local"</span>;</div><div class="line">    alert(myName); <span class="comment">// "local"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>用另一个陷阱来测试下你是否真的理解了预解析：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (!(<span class="string">"a"</span> <span class="keyword">in</span> <span class="built_in">window</span>)) &#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">alert(a);</div></pre></td></tr></table></figure></p>
+<p>a 变量的声明被提前到了代码顶端，此时还未赋值。接下来进入 if 语句，判断条件中 “a” in window 已成立（a 已被声明为全局变量），所以判断语句计算结果为 false，直接就跳出 if 语句了，所以 a 的值为 undefined。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a; <span class="comment">// "undefined"</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> <span class="keyword">in</span> <span class="built_in">window</span>); <span class="comment">// true</span></div><div class="line"> </div><div class="line"><span class="keyword">if</span> (!(<span class="string">"a"</span> <span class="keyword">in</span> <span class="built_in">window</span>)) &#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span>; <span class="comment">// 不执行</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line">alert(a); <span class="comment">// "undefined"</span></div></pre></td></tr></table></figure></p>
+<p>解决：变量声明，最好手动置于作用域顶部，对于无法当下赋值的变量，可采取先声明后赋值的手法。</p>
+<h3 id="函数声明"><a href="#函数声明" class="headerlink" title="函数声明"></a>函数声明</h3><p><strong>函数声明也是被提前至作用域顶部，先于任何表达式和语句被解析和求值的</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">alert(<span class="keyword">typeof</span> foo); <span class="comment">// "function"</span></div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// body...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以对比一下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">alert(<span class="keyword">typeof</span> foo); <span class="comment">// "undefined"</span></div><div class="line"> </div><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// body...</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>明白了这个道理的你，是否还会掉入以下的陷阱呢？<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="string">"1"</span>);</div><div class="line">&#125;</div><div class="line"> </div><div class="line">test();</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="string">"2"</span>);</div><div class="line">&#125;</div><div class="line"> </div><div class="line">test();</div></pre></td></tr></table></figure></p>
+<p>运行以上代码片段，看到的两次弹窗显示的都是 “2”，为什么不是分别为 “1” 和 “2” 呢？很简单，test 的声明先于 test() 被解析，由于后者覆盖前者，所以两次执行的结果都是 “2”。</p>
+<p>解决：多数情况下，我用函数表达式来代替函数声明，特别是在一些语句块中。</p>
+<h3 id="函数表达式"><a href="#函数表达式" class="headerlink" title="函数表达式"></a>函数表达式</h3><p>先看命名函数表达式，理所当然，就是它得有名字，例如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// body...</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>要注意的是：函数名只对其函数内部可见。如以下陷阱：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    foo(); <span class="comment">// 正常运行</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line">foo(); <span class="comment">// 出错：ReferenceError</span></div></pre></td></tr></table></figure></p>
+<p>解决：尽量少用命名函数表达式（除了一些递归以及 debug 的用途），切勿将函数名使用于外部。</p>
+<h3 id="函数的自执行"><a href="#函数的自执行" class="headerlink" title="函数的自执行"></a>函数的自执行</h3><p>对于函数表达式，可以通过后面加上 () 自执行，而且可在括号中传递参数，而函数声明不可以。陷阱：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// (1) 这只是一个分组操作符，不是函数调用！</span></div><div class="line"><span class="comment">// 所以这里函数未被执行，依旧是个声明</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  alert(x);</div><div class="line">&#125;(<span class="number">1</span>);</div></pre></td></tr></table></figure></p>
+<p>以下代码片段分别执行都弹窗显示 “1”，因为在 (1) 之前，都为函数表达式，所以这里的 ()非分组操作符，而为运算符，表示调用执行。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 标准的匿名函数表达式</span></div><div class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  alert(x);</div><div class="line">&#125;(<span class="number">1</span>);</div><div class="line"> </div><div class="line"><span class="comment">// 前面的 () 将 function 声明转化为了表达式</span></div><div class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  alert(x);</div><div class="line">&#125;)(<span class="number">1</span>);</div><div class="line"> </div><div class="line"><span class="comment">// 整个 () 内为表达式</span></div><div class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  alert(x);</div><div class="line">&#125;(<span class="number">1</span>));</div><div class="line"> </div><div class="line"><span class="comment">// new 表达式</span></div><div class="line"><span class="keyword">new</span> <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  alert(x);</div><div class="line">&#125;(<span class="number">1</span>);</div><div class="line"> </div><div class="line"><span class="comment">// &amp;&amp;, ||, !, +, -, ~ 等操作符（还有逗号），在函数表达式和函数声明上消除歧义</span></div><div class="line"><span class="comment">// 所以一旦解析器知道其中一个已经是表达式了，其它的也都默认为表达式了</span></div><div class="line"><span class="literal">true</span> &amp;&amp; <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  alert(x);</div><div class="line">&#125;(<span class="number">1</span>);</div></pre></td></tr></table></figure></p>
+<p>解决：这个陷阱的关键在于，弄清楚形形色色函数表达式的实质。</p>
+<h3 id="循环中的闭包"><a href="#循环中的闭包" class="headerlink" title="循环中的闭包"></a>循环中的闭包</h3><p>以下演示的是一个常见的陷阱：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> links = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"ul"</span>)[<span class="number">0</span>].getElementsByTagName(<span class="string">"a"</span>);</div><div class="line"> </div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = links.length; i &lt; l; i++) &#123;</div><div class="line">    links[i].onclick = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">        e.preventDefault();</div><div class="line">        alert(<span class="string">"You click link #"</span> + i);</div><div class="line">    &#125;        </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们预期当点击第 i 个链接时，得到此序列索引 i 的值，可实际无论点击哪个链接，得到的都是 i 在循环后的最终结果：”5”。</p>
+<p>解释一下原因：当 alert 被调用时，for 循环内的匿名函数表达式，保持了对外部变量 i的引用（闭包），此时循环已结束，i 的值被修改为 “5”。</p>
+<p>解决：为了得到想要的结果，需要在每次循环中创建变量 i 的拷贝。以下演示正确的做法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> links = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"ul"</span>)[<span class="number">0</span>].getElementsByTagName(<span class="string">"a"</span>);</div><div class="line"> </div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = links.length; i &lt; l; i++) &#123;</div><div class="line">    links[i].onclick = (<span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">            e.preventDefault();</div><div class="line">            alert(<span class="string">"You click link #"</span> + index);</div><div class="line">        &#125;</div><div class="line">    &#125;)(i);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，(function () { … })() 的形式，就是上文提到的 <strong>函数的自执行</strong> ，i 作为参数传给了 index，alert 再次执行时，它就拥有了对 index 的引用，此时这个值是不会被循环改变的。当然，明白了其原理后，你也可以这样写：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = links.length; i &lt; l; i++) &#123;</div><div class="line">    (<span class="function"><span class="keyword">function</span> (<span class="params">index</span>) </span>&#123;</div><div class="line">        links[i].onclick = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">            e.preventDefault();</div><div class="line">            alert(<span class="string">"You click link #"</span> + index);</div><div class="line">        &#125;</div><div class="line">    &#125;)(i);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>如果您觉得这篇文章很赞，您的支持将鼓励我更加努力！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wechat.png" alt="Radom WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/alipay.png" alt="Radom Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/定位/" rel="tag">#定位</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/04/CSS3模拟微信拆红包/" rel="next" title="CSS3模拟微信拆红包">
+                <i class="fa fa-chevron-left"></i> CSS3模拟微信拆红包
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="<?php echo $node->nid;?>" data-title="<?php echo htmlspecialchars($node->title);?>" data-author-key="<?php echo $node->uid;?>"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"xinzu86"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] 
+            || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+	</script>
+<!-- 多说公共JS代码 end -->
+  </div>
+
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/me.jpg"
+               alt="Radom" />
+          <p class="site-author-name" itemprop="name">Radom</p>
+          <p class="site-description motion-element" itemprop="description">关注前端技术，同时对互联网产品、运营、交互设计也比较感兴趣。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#全局变量"><span class="nav-number">1.</span> <span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量声明"><span class="nav-number">2.</span> <span class="nav-text">变量声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数声明"><span class="nav-number">3.</span> <span class="nav-text">函数声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数表达式"><span class="nav-number">4.</span> <span class="nav-text">函数表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数的自执行"><span class="nav-number">5.</span> <span class="nav-text">函数的自执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环中的闭包"><span class="nav-number">6.</span> <span class="nav-text">循环中的闭包</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Radom</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'xinzu86';
+      var disqus_identifier = '2016/07/09/JavaScript 中的陷阱/';
+      var disqus_title = "JavaScript中的陷阱";
+      var disqus_url = 'http://www.radom.cc/2016/07/09/JavaScript 中的陷阱/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
